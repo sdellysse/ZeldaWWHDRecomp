@@ -630,7 +630,22 @@ cmake -S . -B build/cmake && make -C build/cmake -j$(sysctl -n hw.ncpu) wwhd
 
 ### Linux
 
-The Linux build uses the Vulkan renderer with the SDL3 host (windows, input, audio). On Ubuntu 24.04:
+The Linux build uses the Vulkan renderer with the SDL3 host (windows, input, audio).
+
+With Nix on x86-64 or arm64 Linux, the development shell provides the compiler and build dependencies:
+
+```sh
+nix develop
+python3 tools/wudextract.py game.wux extract game
+python3 tools/recomp/recomp.py game/code/cking.rpx build/gen
+cmake -S . -B build/linux -G Ninja
+cmake --build build/linux
+```
+
+The extraction step needs your own game image and keys, as described above. If you already have
+`build/gen/`, start with the CMake command.
+
+On Ubuntu 24.04 without Nix:
 
 ```sh
 sudo apt install clang cmake ninja-build zlib1g-dev liblz4-dev libvulkan-dev glslang-dev \
